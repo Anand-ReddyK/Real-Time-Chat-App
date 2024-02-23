@@ -1,0 +1,135 @@
+{% extends 'chat/base.html' %}
+
+{% block title %}{% endblock %}
+
+ {% block content %}
+
+ 
+
+ <div class="bg-gradient-to-r from-amber-300 via-amber-200 to-amber-300 flex flex-col justify-center items-center h-screen"
+ style="height: calc(100vh - 62px);">
+    <div class="max-w-7xl w-full mx-auto bg-white p-6 rounded-lg shadow-lg font-sans text-gray-800 overflow-y-auto max-h-screen" id="messageContainer">
+        <!-- {% for message in conversation.conversation.all %}
+            <div class="flex {% if message.created_by == user %}flex-row-reverse{% else %}flex-row{% endif %} py-2">
+                <div class="p-2 bg-gray-100 rounded-lg">
+                    <p class="text-lg">{{ message }}</p>
+                    <p class="text-sm text-gray-600">{{ message.created_by }} | {{ message.created_at }}</p>
+                </div>
+            </div>
+        {% endfor %} -->
+    </div>
+
+    <div class="max-w-7xl w-full mx-auto mt-4 bg-white p-4 rounded-lg shadow-lg font-sans text-gray-800">
+        <form action="." method="post" class="flex items-center">
+            {% csrf_token %}
+            <input type="text" name="message" class="flex-grow px-4 py-4 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400">
+
+            <button type="submit" class="ml-2 bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-8 rounded focus:outline-none focus:shadow-outline">
+                Send
+            </button>
+        </form>
+    </div>
+
+</div>
+
+<script>
+    
+   
+
+    // Wait for the DOM to load
+    document.addEventListener('DOMContentLoaded', scroolBottom());
+
+    writingMessages()
+
+    //scroolBottom()
+
+    const intervalId = setInterval(isUpdated, 1000)
+    
+    var length = [0]
+
+    function isUpdated(){
+        const endpoint = "http://127.0.0.1:8000/api/length/{{chat_id}}/"
+        const messageContainer = document.getElementById('messageContainer')
+
+        const options = {
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+
+        fetch(endpoint, options)
+
+        .then((response) => {
+            return response.json()
+        })
+
+        .then(data => {
+
+            if (length[0] !== data[0]){
+                console.log(length, data)
+                length = data
+                writingMessages()
+            }
+        })
+    }
+    
+    function writingMessages(){
+
+        const endpoint = "http://127.0.0.1:8000/api/{{chat_id}}/"
+        const messageContainer = document.getElementById('messageContainer')
+
+        const options = {
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+
+        fetch(endpoint, options)
+
+        .then((response) => {
+            return response.json()
+        })
+
+        .then(data => {
+            console.log(data)
+            messageContainer.innerHTML = ''
+
+            for(var index in data){
+
+                var message = data[index]
+
+                var direction = "flex-row"
+                if(message.created_by === "{{user}}"){
+                    direction = "flex-row-reverse"
+                }
+                
+                messageContainer.innerHTML += `
+                    <div class="flex ${direction} py-2">
+                        <div class="p-2 bg-gray-100 rounded-lg">
+                            <p class="text-lg">${message.message}</p>
+                            <p class="text-sm text-gray-600">${ message.created_by } | ${ message.created_at }</p>
+                        </div>
+                    </div>
+                `
+            }
+            scroolBottom()
+        })
+        //scroolBottom()
+    }
+
+    function scroolBottom(){
+        // Scroll to the bottom of the message container
+        const messageContainer = document.getElementById('messageContainer');
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+
+        //window.scrollTo(0, document.body.scrollHeight);
+        console.log('runned')
+    }
+
+</script>
+
+{% endblock %}
+
+ 

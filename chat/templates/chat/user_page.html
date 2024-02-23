@@ -1,0 +1,58 @@
+{% extends 'chat/base.html' %}
+
+{% block title %}
+{{username}}|chats
+{% endblock %}
+
+<!-- 
+    {% for chat in chats %}
+        <a href="{% url 'chat' chat.id %}">
+            <p>Conversation between</p>
+            {% for member in chat.members.all %}
+                <p class="inline">{{member}}</p>
+            {% endfor %}
+            <p>{{chat.created_at}}</p>
+        </a>
+    {% endfor %}
+ -->
+
+ {% block content %}
+
+ <h1 class="text-4xl font-semibold text-gray-300">All Conversations</h1>
+
+ <div class="bg-gradient-to-r from-amber-300 via-amber-200 to-amber-300 min-h-full flex flex-col justify-center items-center px-4 py-8">
+    <h1 class="text-4xl font-semibold text-gray-300">All Conversations</h1>
+ 
+     <div class="max-w-md mx-auto mt-8 bg-blue-100 p-6 rounded-lg shadow-lg font-sans text-gray-800">
+         {% for chat in chats %}
+             <a href="{% url 'chat' chat.id %}" class="block py-4 px-6 border-b border-gray-300 hover:bg-blue-200 transition-colors">
+                 <p class="text-gray-900 text-xl">Conversation between:</p>
+                 <div class="flex space-x-2 mt-2">
+                     {% for member in chat.members.all %}
+                         <p class="text-blue-500 text-base">{{ member }}</p>
+                     {% endfor %}
+                 </div>
+                 <p class="text-gray-400 text-xs mt-1">{{ chat.created_at }}</p>
+             </a>
+         {% endfor %}
+     </div>
+ 
+ </div>
+ 
+ {% endblock %}
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

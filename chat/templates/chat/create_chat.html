@@ -1,0 +1,32 @@
+{% extends 'chat/base.html' %}
+
+{% block title %}
+New chat
+{% endblock %}
+
+
+{% block content %}
+
+<div class="bg-gradient-to-r from-amber-300 via-amber-200 to-amber-300 flex flex-col justify-center items-center px-4 py-8"
+style="height: calc(100vh - 62px);">
+
+    <h1 class="text-4xl font-semibold text-gray-800 mb-8">Add Users</h1>
+
+    <form action="." method="POST" class="max-w-md w-full mx-auto bg-white p-6 rounded-lg shadow-lg font-sans text-gray-800">
+        {% csrf_token %}
+        
+        {% for user in users %}
+        <div class="flex items-center mb-4">
+            <input type="checkbox" value="{{ user.id }}" name="selected_users" id="user-{{ user.id }}" class="appearance-none h-5 w-5 border-gray-300 rounded-sm checked:bg-blue-500 checked:border-transparent focus:ring-blue-400">
+            <label for="user-{{ user.id }}" class="text-gray-700 text-lg ml-2">{{ user }}</label>
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Submit
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}
