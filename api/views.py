@@ -4,14 +4,14 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from chat.models import SingleChat
+from chat.models import Room
 from .serializers import SingleChatSerializer
 
 # Create your views here.
 
 @api_view(['GET'])
 def chatList(request, pk):
-    chats = SingleChat.objects.get(id=pk)
+    chats = Room.objects.get(id=pk)
 
     chat_json = []
 
@@ -28,7 +28,7 @@ def chatList(request, pk):
 
 @api_view(['GET'])
 def chatLenght(request, pk):
-    chats = SingleChat.objects.get(id=pk)
+    chats = Room.objects.get(id=pk)
 
     length = len(chats.conversation.all())
 

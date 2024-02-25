@@ -6,5 +6,5 @@ from chat import models
 class SingleChatSerializer(serializers.ModelSerializer):
     
     class Meta:
-        model = models.SingleChat
+        model = models.Room
         fields = '__all__'
