@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
 
     "chat",
-    "api",
+    # "api",
     "websocket_server",
 ]
 

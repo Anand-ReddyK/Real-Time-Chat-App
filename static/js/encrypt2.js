@@ -1,33 +1,36 @@
-const { publicKey, privateKey } = await window.crypto.subtle.generateKey(
-    {
-      name: "RSA-OAEP",
-      modulusLength: 2048, // can be 1024, 2048, or 4096
-      publicExponent: new Uint8Array([0x01, 0x00, 0x01]),
-      hash: { name: "SHA-256" }, // can be "SHA-1", "SHA-256", "SHA-384", or "SHA-512"
-    },
-    true, // whether the key is extractable (i.e. can be used in exportKey)
-    ["encrypt", "decrypt"] // can be any combination of "encrypt" and "decrypt"
-);
+// Example function to encrypt a message
+async function encryptMessage(message, sharedKey) {
+  // Import the sharedKey as a CryptoKey object
+  sharedKey = await crypto.subtle.importKey('raw', sharedKey, { name: 'AES-GCM' }, false, ['encrypt']);
 
-async function encryption(data, recipientPublicKey){
-    const encryptedData = await window.crypto.subtle.encrypt(
-        {
-          name: "RSA-OAEP",
-        },
-        recipientPublicKey, // from generateKey or importKey above
-        data // ArrayBuffer of data you want to encrypt
-    );
-
-    return encryptedData;
+  let encoder = new TextEncoder();
+  let data = encoder.encode(message);
+  let iv = crypto.getRandomValues(new Uint8Array(12)); // Initialization vector
+  let cipher = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, sharedKey, data);
+  return { iv: iv, data: new Uint8Array(cipher) }; // Return an object containing both IV and encrypted data
 }
 
-async function decryption(encryptedData){
+// Example function to decrypt a message
+async function decryptMessage(encryptedMessage, sharedKey) {
+  // Import the sharedKey as a CryptoKey object
+  sharedKey = await crypto.subtle.importKey('raw', sharedKey, { name: 'AES-GCM' }, false, ['decrypt']);
 
-    const decryptedData = await window.crypto.subtle.decrypt(
-        {
-          name: "RSA-OAEP",
-        },
-        privateKey, // from generateKey or importKey above
-        encryptedData // ArrayBuffer of the data
-    );
+  let decryptedData = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: encryptedMessage.iv }, sharedKey, encryptedMessage.data);
+  let decoder = new TextDecoder();
+  return decoder.decode(decryptedData);
 }
+
+// Example usage
+let message = 'Hello, world!';
+encryptMessage(message, sharedKey).then(encryptedMessage => {
+  console.log('Encrypted message:', encryptedMessage);
+  
+  // Assuming encryptedMessage is received from the server
+  decryptMessage(encryptedMessage, sharedKey).then(decryptedMessage => {
+      console.log('Decrypted message:', decryptedMessage);
+  }).catch(error => {
+      console.error('Decryption error:', error);
+  });
+}).catch(error => {
+  console.error('Encryption error:', error);
+});

@@ -26,14 +26,14 @@
  <div class="bg-gradient-to-r from-amber-300 via-amber-200 to-amber-300 flex flex-col justify-center items-center h-screen"
  style="height: calc(100vh - 62px);">
     <div class="max-w-7xl w-full mx-auto bg-white p-6 rounded-lg shadow-lg font-sans text-gray-800 overflow-y-auto max-h-screen" id="messageContainer">
-        {% for message in conversation.conversation.all %}
+        <!-- {% for message in conversation.conversation.all %}
             <div class="flex {% if message.created_by == user %}flex-row-reverse{% else %}flex-row{% endif %} py-2">
                 <div class="p-2 bg-gray-100 rounded-lg">
                     <p class="text-lg">{{ message }}</p>
                     <p class="text-sm text-gray-600">{{ message.created_by }} | {{ message.created_at }}</p>
                 </div>
             </div>
-        {% endfor %}
+        {% endfor %} -->
     </div>
 
     <div class="max-w-7xl w-full mx-auto mt-4 bg-white p-4 rounded-lg shadow-lg font-sans text-gray-800">
@@ -49,25 +49,33 @@
 
 </div>
 
-<script src="{% static 'js/encrypt.js' %}"></script>
-<script src="{% static 'js/messages.js' %}"></script>
 
 <script>
   // Wait for the DOM to load
   document.addEventListener('DOMContentLoaded', function () {
-    // Scroll to the bottom of the message container
-    const messageContainer = document.getElementById('messageContainer');
-    messageContainer.scrollTop = messageContainer.scrollHeight;
+      // Scroll to the bottom of the message container
+      const messageContainer = document.getElementById('messageContainer');
+      messageContainer.scrollTop = messageContainer.scrollHeight;
+      
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    console.log("{{user}}")
+    
+    const user = "{{user}}";
+    
+    const serializedSharedKey = "{{shared_key}}";
+    // Deserialize the shared key from base64
+    let sharedKey = Uint8Array.from(atob(serializedSharedKey), c => c.charCodeAt(0));
 
-    window.scrollTo(0, document.body.scrollHeight);
-  });
-  console.log("{{user}}")
+    const messages = "{{encrypted_messages}}";
+    console.log(messages);
+    console.log("*******************************************");
 
-  const user = "{{user}}";
 
-  
 </script>
 
+<script src="{% static 'js/encrypt2.js' %}"></script>
+<script src="{% static 'js/messages.js' %}"></script>
 {% endblock %}
 
  

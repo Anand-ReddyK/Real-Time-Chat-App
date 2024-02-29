@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 import json
+import base64
 
 from django.views.decorators.http import require_POST
 
@@ -48,8 +49,6 @@ def sign_up(request):
             return redirect('user_chats')
         except Exception as e:
             user_exist = 1
-            
-        # print(request.POST)
     
     context = {
         "user_ex": user_exist
@@ -140,15 +139,39 @@ def messages(request, pk):
             message_json = createNewMessage(mess, pk, user)
 
             return JsonResponse(message_json)
+
     
     context = {
         "friend_requests": friend_requests,
         "conversation": conversation,
         "user": user,
-        "chat_id": pk
+        "chat_id": pk,
+        "shared_key": base64.b64encode(conversation.shared_key).decode('utf-8')
     }
 
     return render(request, "chat/messages.html", context)
+
+
+@login_required
+def api_messages(request, pk):
+    conversation = models.Room.objects.get(id=pk)
+    user = models.User.objects.get(name=request.session['user'])
+
+    if user not in conversation.members.all():
+        raise ValueError("The User is not in the Room")
+    
+
+    messages = []
+    for message in conversation.conversation.all():
+        # Extract relevant information from the message object
+        message_info = {
+            'message': message.content,
+            'created_by': str(message.created_by),
+            'created_at': message.created_at.strftime('%Y-%m-%d %H:%M:%S')
+        }
+        messages.append(message_info)
+    # Return the messages as JSON response
+    return JsonResponse({'messages': messages})
 
 
 @login_required

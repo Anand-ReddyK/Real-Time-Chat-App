@@ -8,6 +8,8 @@ urlpatterns = [
     path('log_out/', views.log_out, name="log_out"),
     path('user_chats/', views.user_page_view, name="user_chats"),
     path('chat/<int:pk>/', views.messages, name="chat"),
+    path('api/chat/<int:pk>/', views.api_messages, name="api-chat"),
+
     path('new-friend-request/', views.new_friend_request, name="new-friend-request"),
 
     path('friend-request/<int:fr_req_id>/<str:fr_req_response>/', views.friend_requests_view, name="friend_request"),

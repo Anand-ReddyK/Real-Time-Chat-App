@@ -47,7 +47,7 @@
                     <div class="flex space-x-2 mt-2">
                         {% for member in chat.members.all %}
                             {% if member != user %}
-                                <p class="text-gray-900 text-xl">{{ member }}</p>
+                                <p class="text-gray-900 text-xl">{{ member.name }}</p>
                                 <!-- <p class="text-blue-500 text-base"></p> -->
                             {% endif %}
                         {% endfor %}
