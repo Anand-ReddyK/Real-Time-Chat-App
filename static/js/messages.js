@@ -5,7 +5,6 @@ var wsURL = "ws://127.0.0.1:8001" + urlPath;
 
 const chatData = 'Hello, server!';
 
-console.log(wsURL);
 
 let socket;
 let connectAttempts = 0;
@@ -59,6 +58,9 @@ message_form.addEventListener('submit', function(event) {
 
     var user_message = message_box.value;
     message_box.value = '';
+    if (user_message == ''){
+        return false;
+    }
     encryptMessage(user_message, sharedKey).then(encrypted_message => {
         
 
@@ -131,19 +133,16 @@ function load_messages(){
     const currentUrl = window.location.href;
     var urlPath = window.location.pathname
 
-    console.log(urlPath, "============================*******")
     fetch(`/api${urlPath}`)
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error(response);
         }
         return response.json();
     })
     .then(data => {
         // Handle the response data containing the messages
-        console.log(data.messages, "============================")
         for(i = 0; i < data.messages.length; i++){
-            console.log(data.messages[i])
             addChatObject(data.messages[i]);
         }
         // Process the messages here

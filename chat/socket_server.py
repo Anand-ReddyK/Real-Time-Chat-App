@@ -27,7 +27,7 @@ async def echo(websocket, path):
                     await webs.send(message)
         
         connected[path].remove(websocket)
-        print("Sent somthing")
+        print("Client Disconnected")
 
     except websockets.exceptions.ConnectionClosed as e:
         print("A Client disconnected", e)

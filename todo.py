@@ -3,18 +3,20 @@
 #! Important
 """
 TODO: Permissions
-    -> Only room members can access the room or create a message for the room
+    //-> Only room members can access the room or create a message for the room
 
     
 TODO: Create a better  login system with password
 
-TODO: Add encryption to message 
+//TODO: Add encryption to message 
 
-TODO: Create friends and you can only create a room with your friends
+//TODO: Create friends and you can only create a room with your friends
 
 //When web socket connection is lost try to reconnect
 
-TODO: change the Room Model, add a randon id
+//TODO: change the Room Model, add a randon id
+
+TODO: Customized Error pages
 
 """
 
