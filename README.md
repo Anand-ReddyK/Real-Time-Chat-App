@@ -44,5 +44,11 @@ To run the Project
 python manage.py runserver
 
 ```
+Open another terminal and run the `socket_server.py` file inside `Real-Time-Chat-App\chat`
+```
 
-open the link `http://127.0.0.1:8000/` in you browser
+python .\socket_server.py
+
+```
+
+open the link `http://127.0.0.1:8000/` in your browser
