@@ -2,10 +2,12 @@ import websockets
 import asyncio
 from collections import defaultdict
 import json
+import sys
 
 
 
 PORT = 8001
+DEFAULT_HOST = "localhost"
 print("Server started!!!")
 
 connected = defaultdict(set)
@@ -34,7 +36,8 @@ async def echo(websocket, path):
 
 
 async def main():
-    server = await websockets.serve(echo, "localhost", PORT)
+    host = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_HOST
+    server = await websockets.serve(echo, host, PORT)
     print(f"WebSocket server listening on ws://localhost:{PORT}")
 
     # Keep the main coroutine running to keep the server alive
