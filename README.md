@@ -40,3 +40,23 @@ python .\socket_server.py
 ```
 
 open the link `http://127.0.0.1:8000/` in your browser
+
+## Installation with Docker
+Clone the repository
+```
+git clone https://github.com/Anand-ReddyK/Real-Time-Chat-App.git
+```
+
+Navigate to the root directory where the `Dockerfile` exists
+
+Create a Docker image
+```
+docker build -t chat-app:1.0 .
+```
+
+Run the container using the newly created Docker image `chat-app:1.0`
+```
+docker run -p 8000:8000 -p 8001:8001 chat-app:1.0
+```
+
+open the link `http://127.0.0.1:8000/` in your browser
